@@ -13,9 +13,10 @@ formDOM.addEventListener('submit', async (e) => {
   e.preventDefault()
   const username = usernameInputDOM.value
   const password = passwordInputDOM.value
+  console.log(username, password)
 
   try {
-    const { data } = await axios.post('/api/v1/login', { username, password })
+    const data = await axios.post('/api/v1/login', { username, password })
 
     formAlertDOM.style.display = 'block'
     formAlertDOM.textContent = data.msg

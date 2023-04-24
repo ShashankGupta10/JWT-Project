@@ -1,8 +1,9 @@
-// const express = require('express');
-// const router = express.Router();
-// const { LoginUser } = require('../controllers/main')
+const express = require('express');
+const router = express.Router();
+const { login, dashboard } = require('../controllers/main')
 
-// router.route('/').post(LoginUser)
+router.route('/dashboard').get(dashboard)
+router.route('/login').post(login)
 
 
-// module.exports = router
+module.exports = router

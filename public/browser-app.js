@@ -13,19 +13,19 @@ formDOM.addEventListener('submit', async (e) => {
   e.preventDefault()
   const username = usernameInputDOM.value
   const password = passwordInputDOM.value
-  console.log(username, password)
 
   try {
     const data = await axios.post('/api/v1/login', { username, password })
+    console.log(data.data)
 
     formAlertDOM.style.display = 'block'
-    formAlertDOM.textContent = data.msg
+    formAlertDOM.textContent = data.data.msg
 
     formAlertDOM.classList.add('text-success')
     usernameInputDOM.value = ''
     passwordInputDOM.value = ''
 
-    localStorage.setItem('token', data.token)
+    localStorage.setItem('token', data.data.token)
     resultDOM.innerHTML = ''
     tokenDOM.textContent = 'token present'
     tokenDOM.classList.add('text-success')
@@ -44,20 +44,23 @@ formDOM.addEventListener('submit', async (e) => {
 
 btnDOM.addEventListener('click', async () => {
   const token = localStorage.getItem('token')
+  console.log(token)
+  if(token!== null){
   try {
-    const { data } = await axios.get('/api/v1/dashboard', {
+    const data = await axios.get('/api/v1/dashboard', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-    resultDOM.innerHTML = `<h5>${data.msg}</h5><p>${data.secret}</p>`
+    
+    resultDOM.innerHTML = `<h5>${data.data.msg}</h5><p>${data.data.secret}</p>`
 
-    data.secret
+    data.data.secret
   } catch (error) {
     localStorage.removeItem('token')
-    resultDOM.innerHTML = `<p>${error.response.data.msg}</p>`
+    resultDOM.innerHTML = `<p>${error}</p>`
   }
-})
+}})
 
 const checkToken = () => {
   tokenDOM.classList.remove('text-success')

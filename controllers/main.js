@@ -11,13 +11,13 @@ const login =  async (req, res) =>{
         console.log(loggedInUser)
         if(loggedInUser){
             if(password == loggedInUser.password){
-                const token = jwt.sign({ loggedInUser }, secret, { expiresIn: '30d' })
+                const token = jwt.sign({ loggedInUser }, secret)
                 res.status(200).json({msg: "User created", token})
             }
         }
         else{
             // res.status(400).json({msg: "Bad credentials"})
-            console.log("aaaaaaaaaaaaaaaaaaa")
+            console.log("aaaaaaaaaaaaaaaaaaa");
         }
 
 
@@ -28,9 +28,15 @@ const login =  async (req, res) =>{
 
 
 const dashboard = async (req, res) =>{
+    const secret = process.env.JWT_SECRET
+    const authHeader = req.headers.authorization
+    console.log(authHeader)
+    const token = authHeader.split(' ')[1]
+    console.log(token)
     try {
-        jwt.verify(token, secret)
-        res.status(200).json({msg: `Hello Joh Doe`, secret: "Your lucky number is 69"})
+        const decoded = await jwt.verify(token, secret)
+        console.log(decoded.loggedInUser.username)
+        res.status(200).json({msg: `Hello ${decoded.loggedInUser.username}`, secret: `Your secret lucky number is ${Math.floor(Math.random()*100)}`})
     } catch (error) {
         console.log(error)
     }

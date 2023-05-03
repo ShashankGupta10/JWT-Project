@@ -24,7 +24,6 @@ app.use("/api/v1", mainRouter);
 app.use(errorHandlerMiddleware);
 app.use(notFound);
 
-
 const StartServer = async () => {
   try {
     app.listen(port, () => {
